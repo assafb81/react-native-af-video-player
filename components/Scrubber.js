@@ -2,9 +2,7 @@ import React from 'react' // eslint-disable-line
 import PropTypes from 'prop-types'
 import {
   View,
-  Platform,
   StyleSheet,
-  Slider as RNSlider
 } from 'react-native'
 import Slider from 'react-native-slider'
 
@@ -15,8 +13,26 @@ const styles = StyleSheet.create({
   },
   slider: {
     marginHorizontal: -10
-  }
+  },
+  track: {
+    height: 2,
+    borderRadius: 1,
+    backgroundColor: '#ffffff',
+  },
+  thumb: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#ffffff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowColor: '#ffffff',
+    shadowRadius: 2,
+    shadowOpacity: 1,
+  },
 })
+
+// not in stylesheet due to issues in react-native-slider
+const thumbTouchStyle = { width: 50, height: 40 };
 
 const Scrubber = (props) => {
   const trackColor = 'rgba(255,255,255,0.5)'
@@ -25,28 +41,17 @@ const Scrubber = (props) => {
   const trackStyle = { borderRadius: 1 }
   return (
     <View style={styles.container}>
-      { Platform.OS === 'ios' ?
-        <Slider
-          onValueChange={val => props.onSeek(val)}
-          onSlidingComplete={val => props.onSeekRelease(val)}
-          value={progress === Number.POSITIVE_INFINITY ? 0 : progress}
-          thumbTintColor={theme}
-          thumbStyle={thumbStyle}
-          trackStyle={trackStyle}
-          minimumTrackTintColor={theme}
-          maximumTrackTintColor={trackColor}
-        />
-      :
-        <RNSlider
-          style={styles.slider}
-          onValueChange={val => props.onSeek(val)}
-          onSlidingComplete={val => props.onSeekRelease(val)}
-          value={progress}
-          thumbTintColor={theme}
-          minimumTrackTintColor={theme}
-          maximumTrackTintColor={trackColor}
-        />
-      }
+      <Slider
+        onValueChange={val => onSeek(val)}
+        onSlidingComplete={val => onSeekRelease(val)}
+        value={progress === Number.POSITIVE_INFINITY ? 0 : progress}
+        minimumTrackTintColor={'#ffffff'}
+        thumbTintColor={'#ffffff'}
+        trackStyle={styles.track}
+        thumbStyle={styles.thumb}
+        style={styles.sliderContainer}
+        thumbTouchSize={thumbTouchStyle}
+      />
     </View>
   )
 }
